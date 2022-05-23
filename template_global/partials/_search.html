@@ -1,0 +1,9 @@
+<nav class="navbar navbar-light bg-light mt-4">
+    <div class="container-fluid ">
+        <form action="{% url 'clinica:search' %}" class="d-flex mx-auto" method="GET">
+            <input class="form-control me-3" type="search" placeholder="Search" name="search" value="{{search_term}}"
+                required>
+            <button class="btn btn-outline-success" type="submit">Buscar</button>
+        </form>
+    </div>
+</nav>

@@ -1,0 +1,105 @@
+class CadastroPaciente(forms.ModelForm):
+    nome_completo = forms.CharField(
+        required=True,
+        widget=forms.TextInput(attrs={
+            'placeholder': 'Digite seu nome completo'
+        }),
+        error_messages={
+            'required': 'Este campo é obrigatorio'
+        },
+    )
+
+    email = forms.CharField(
+        required=True,
+        widget=forms.EmailInput(attrs={
+            'placeholder': 'Digite seu email aqui'
+        }),
+        error_messages={
+            'required': 'Seu email é obrigatorio'
+        }
+
+    )
+
+    username = forms.CharField(
+        required=True,
+        widget=forms.TextInput(attrs={
+            'placeholder': 'Your username here'
+        }), error_messages={
+            'required': 'Username must not be empty'
+        },
+    )
+    sexos = [('1', 'Feminino'), ('2', 'Masculino')]
+    sexo = forms.ChoiceField(
+        required=True,
+        widget=forms.RadioSelect,
+        choices=sexos,
+    )
+
+    senha = forms.CharField(
+        required=True,
+        widget=forms.PasswordInput(attrs={
+            'placeholder': 'Digite sua senha'
+        }),
+        error_messages={
+            'required': 'Campo obrigatorio'
+        },
+        help_text='A senha deve conter mais que 8 caracteres',
+        validators=[strong_password]
+    )
+
+    confirmar_senha = forms.CharField(
+        required=True,
+        widget=forms.PasswordInput(attrs={
+            'placeholder': 'Repita sua senha'
+        }),
+        error_messages={
+            'required': 'Senhas divergentes'
+        },
+
+    )
+
+    class Meta:
+        model = User
+        fields = [
+            'nome_completo',
+            'email',
+            'username',
+            'sexo',
+            'senha',
+
+        ]
+
+    def clean(self):
+        cleaned_data = super().clean()
+
+        senha = cleaned_data.get('senha')
+        confirmar_senha = cleaned_data.get('confirmar_senha')
+
+        if senha != confirmar_senha:
+            senha_divergente = ValidationError(
+                'Senhas divergentes',
+                code='invalid'
+            )
+            raise ValidationError({
+                'senha': senha_divergente,
+                'confirmar_senha': [
+                    senha_divergente
+                ]
+            })
+
+
+
+
+{% for field in forms %}
+        <label for="{{field.id_for_label}}">{{field.label}}</label>
+        
+                    {{field}}
+
+            {% if field.help_text %}
+                {{field.help_text}}
+            {% endif %}
+
+            {% if field.errors %}
+                {{field.errors}}
+            {% endif %}
+        {% endfor %}

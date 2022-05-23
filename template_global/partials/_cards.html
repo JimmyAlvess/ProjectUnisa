@@ -1,0 +1,32 @@
+<div class="container-md mx-auto mt-5">
+  <div class="row p-2">
+    {% for medico in medicos %}
+    <div class="col p-2">
+      <div class="card" style="width: 19rem">
+
+        <a href="{% url 'clinica:medico' medico.id%}" class="text-decoration-none"> 
+        <img src="{{medico.img.url}}" class="card-img-top img-thumbnail" style="height: 25rem">
+        </a>
+        <div class="card-body">
+          <a href="{% url 'clinica:medico' medico.id%}" class="text-decoration-none">
+            <h5 class="card-title">{{medico.nome_completo}}</h5>
+          </a>
+          <a href="{% url 'clinica:especialidade' medico.especialidade.id %}" class="text-decoration-none">
+            <p class="card-text">{{medico.especialidade}}</p>
+          </a>
+          <a href="{% url 'clinica:medico' medico.id %}" class="text-decoration-none">
+            <p class="card-text">CRM: {{medico.crm}}</p>
+          </a>
+
+          <a href="{% url 'clinica:medico' medico.id %}" class="btn btn-primary text-decoration-none">Agendar consulta</a>
+        </div>
+      </div>
+    </div>
+    {% empty %}
+        <div class="container">
+            <h1>Medicos não encontrados🥲</h1>
+        </div>
+
+    {% endfor %}
+  </div>
+</div>
